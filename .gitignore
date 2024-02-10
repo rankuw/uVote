@@ -1,0 +1,9 @@
+# compiled output
+/backend/dist
+/backend/node_modules
+
+
+# FE dependencies
+/frontend/node_modules
+/frontend/pnp
+
