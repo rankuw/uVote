@@ -6,5 +6,6 @@ export interface createPollInterface{
 
 export interface joinPollInterface{
     user: string,
-    pollId: string
+    pollId: string,
+    userId?: string
 }
