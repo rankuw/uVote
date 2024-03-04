@@ -1,8 +1,10 @@
-import { Logger } from '@nestjs/common';
-import { WebSocketGateway, OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect, WebSocketServer} from '@nestjs/websockets'
+import { BadGatewayException, BadRequestException, HttpException, HttpStatus, Logger, UnauthorizedException, UseFilters } from '@nestjs/common';
+import { WebSocketGateway, OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect, WebSocketServer, SubscribeMessage, WsException} from '@nestjs/websockets'
 import { Socket, Namespace } from "socket.io"
+import { WsCatchAllFilter } from 'src/exception/ws-catch-all';
 
 @WebSocketGateway({namespace: 'polls'})
+@UseFilters(new WsCatchAllFilter())
 export class PollsGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
     private readonly logger = new Logger(PollsGateway.name)
     
@@ -23,5 +25,10 @@ export class PollsGateway implements OnGatewayInit, OnGatewayConnection, OnGatew
         const sockets = this.io.sockets;
         this.logger.log("ws client disconnected with id: ", client.id)
         this.logger.log("Number of connected socket: ", sockets.size)
+    }
+
+    @SubscribeMessage("test")
+    print() {
+        throw new BadRequestException("OOOO")
     }
 }

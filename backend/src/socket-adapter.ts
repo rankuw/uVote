@@ -1,4 +1,4 @@
-import { ForbiddenException, INestApplicationContext } from '@nestjs/common';
+import { INestApplicationContext, UnauthorizedException } from '@nestjs/common';
 import { IoAdapter } from '@nestjs/platform-socket.io';
 import { ServerOptions } from 'socket.io';
 import { ConfigService } from '@nestjs/config';
@@ -35,7 +35,7 @@ export class SocketAdapter extends IoAdapter {
 
 const socketAuthMiddleware = (JwtService) => (socket, next) => {
     const token = socket.handshake.auth.token || socket.handshake.headers["token"]
-
+    console.log(token)
     try{
         const payload = JwtService.verify(token)
         socket.userId = payload.userId
@@ -43,6 +43,7 @@ const socketAuthMiddleware = (JwtService) => (socket, next) => {
         socket.userName = payload.user
         next()
     }catch(err){
-        throw new ForbiddenException()
+        console.log(err)
+        next(new UnauthorizedException())
     }
 }
