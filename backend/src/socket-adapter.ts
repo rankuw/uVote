@@ -38,9 +38,10 @@ const socketAuthMiddleware = (JwtService) => (socket, next) => {
     console.log(token)
     try{
         const payload = JwtService.verify(token)
+        console.log(payload)
         socket.userId = payload.userId
         socket.pollId = payload.pollId
-        socket.userName = payload.user
+        socket.userName = payload.name
         next()
     }catch(err){
         console.log(err)

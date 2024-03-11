@@ -2,6 +2,7 @@ import { Inject, Injectable, InternalServerErrorException, Logger } from "@nestj
 import { ConfigService } from "@nestjs/config";
 import { Redis } from "ioredis";
 import { IORedisKey } from "src/redis.module";
+import { Poll } from "./polls.interface";
 
 @Injectable()
 export class PollEntity {
@@ -40,9 +41,10 @@ export class PollEntity {
         }
     }
 
-    async getPoll(pollId: string) {
+    async getPoll(pollId: string): Promise<Poll> {
         try{
             const key = "pollId:" + pollId
+            console.log(key)
             const poll = await this.RedisClient.get(key)
             return JSON.parse(poll)
         }catch(err){
@@ -62,5 +64,18 @@ export class PollEntity {
             this.logger.error(err)
             throw new InternalServerErrorException()
         } 
+    }
+
+    async removeParticipant(userId: string, pollId: string) {
+        try{
+            const poll = await this.getPoll(pollId)
+            const index = poll.participants.indexOf(userId)
+            poll.participants.splice(index, 1)
+            const res = await this.RedisClient.setex("pollId:" + pollId, this.ttl, JSON.stringify(poll))
+            return poll
+        }catch(err){
+            this.logger.error(err)
+            throw new InternalServerErrorException()
+        }
     }
 }

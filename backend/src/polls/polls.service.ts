@@ -46,4 +46,13 @@ export class PollsService {
     async getPoll(pollId: string) {
         return this.pollsEntity.getPoll(pollId)
     }
+
+    async removeUser(userId: string, pollId: string){
+        const poll = await this.pollsEntity.getPoll(pollId)
+
+        if (!poll.hasStarted){
+            return this.pollsEntity.removeParticipant(userId, pollId)
+        }
+        
+    }
 }
