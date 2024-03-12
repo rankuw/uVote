@@ -76,8 +76,33 @@ export class PollsGateway implements OnGatewayInit, OnGatewayConnection, OnGatew
         @ConnectedSocket() client
     ) {
         try{
-            console.log(client.pollId, id, ".....................")
             const updatedPoll = await this.pollService.removeNomination(client.pollId, id)
+            this.io.to(client.pollId).emit('poll_updated', updatedPoll)
+        }catch(err){
+            console.log(err)
+        }
+    }
+
+    @UseGuards(WsAuth)
+    @SubscribeMessage("startPoll")
+    async startPoll(
+        @ConnectedSocket() client
+    ) {
+        try{
+            const updatedPoll = await this.pollService.startPoll(client.pollId)
+            this.io.to(client.pollId).emit('poll_updated', updatedPoll)
+        }catch(err){
+            console.log(err)
+        }
+    }
+
+    @SubscribeMessage("submitPoll")
+    async submitPoll(
+        @MessageBody("rankings") rankings: [string],
+        @ConnectedSocket() client
+    ) {
+        try{
+            const updatedPoll = await this.pollService.submitPoll(client.pollId, client.userId, rankings)
             this.io.to(client.pollId).emit('poll_updated', updatedPoll)
         }catch(err){
             console.log(err)

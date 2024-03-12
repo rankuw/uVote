@@ -75,4 +75,22 @@ export class PollsService {
             throw new InternalServerErrorException()
         }
     }
+
+    async startPoll(pollId) {
+        try{
+            const poll = await this.pollsEntity.startPoll(pollId)
+            return poll
+        }catch(err){
+            throw new InternalServerErrorException()
+        }
+    }
+
+    async submitPoll(pollId: string, userId: string, rankings: [string]) {
+        try{
+            const poll = await this.pollsEntity.addRankings(pollId, userId, rankings)
+            return poll
+        }catch(err){
+            throw new InternalServerErrorException()
+        }
+    }
 }
