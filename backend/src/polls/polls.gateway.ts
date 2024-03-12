@@ -108,4 +108,17 @@ export class PollsGateway implements OnGatewayInit, OnGatewayConnection, OnGatew
             console.log(err)
         }
     }
+
+    @UseGuards(WsAuth)
+    @SubscribeMessage("result")
+    async result(
+        @ConnectedSocket() client
+    ) {
+        try{
+            const finalPoll = await this.pollService.results(client.pollId)
+            this.io.to(client.pollId).emit('poll_updated', finalPoll)
+        }catch(err){
+            console.log(err)
+        }
+    }
 }

@@ -3,6 +3,7 @@ import { ConfigService } from "@nestjs/config";
 import { Redis } from "ioredis";
 import { IORedisKey } from "src/redis.module";
 import { Poll } from "./polls.interface";
+import { resultAlgo } from "./helper";
 
 @Injectable()
 export class PollEntity {
@@ -34,7 +35,8 @@ export class PollEntity {
                 participants: [],
                 nominations: {},
                 hasStarted: false,
-                rankings: {}
+                rankings: {},
+                results: []
             }
             const res = await this.RedisClient.setex(key, this.ttl, JSON.stringify(data))
             return data;
@@ -124,6 +126,22 @@ export class PollEntity {
             poll.rankings[userId] = rankings
             await this.RedisClient.setex("pollId:" + pollId, this.ttl, JSON.stringify(poll))
             return poll
+        }catch(err){
+            console.log(err)
+            throw new InternalServerErrorException()
+        }
+    }
+
+    async addResults(pollId: string) {
+        try{
+            const poll = await this.getPoll(pollId)
+            const result = resultAlgo(poll.rankings, poll.noOfVotes, poll.nominations)
+
+            poll.results = <[]>result
+            poll.hasStarted = false
+            await this.RedisClient.setex("pollId:" + pollId, this.ttl, JSON.stringify(poll))
+            return poll
+
         }catch(err){
             console.log(err)
             throw new InternalServerErrorException()

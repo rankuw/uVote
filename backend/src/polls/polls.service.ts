@@ -93,4 +93,13 @@ export class PollsService {
             throw new InternalServerErrorException()
         }
     }
+
+    async results(pollId: string) {
+        try{
+            const poll = await this.pollsEntity.addResults(pollId)
+            return poll
+        }catch(err){
+            throw new InternalServerErrorException()
+        }
+    }
 }

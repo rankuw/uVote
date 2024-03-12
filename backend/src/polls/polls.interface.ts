@@ -18,5 +18,6 @@ export interface Poll {
     question: string,
     noOfVotes: number,
     nominations: {},
-    rankings: {}
+    rankings: {},
+    results: []
 }
