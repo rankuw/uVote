@@ -41,7 +41,7 @@ export class PollsGateway implements OnGatewayInit, OnGatewayConnection, OnGatew
     }
 
     @UseGuards(WsAuth)
-    @SubscribeMessage("test")
+    @SubscribeMessage("remove")
     async removeParticipant(
         @MessageBody("id") userId: string,
         @ConnectedSocket() client
@@ -49,6 +49,35 @@ export class PollsGateway implements OnGatewayInit, OnGatewayConnection, OnGatew
         try{
             const updatedPoll = await this.pollService.removeUser(userId, client.pollId)
             console.log(updatedPoll)
+            this.io.to(client.pollId).emit('poll_updated', updatedPoll)
+        }catch(err){
+            console.log(err)
+        }
+    }
+
+    @SubscribeMessage("nominations")
+    async addNomination(
+        @MessageBody("question") nomination: string,
+        @ConnectedSocket() client
+    ) {
+        try{
+            const updatedPoll = await this.pollService.addNomination(client.pollId, client.userId, nomination)
+            console.log(updatedPoll)
+            this.io.to(client.pollId).emit('poll_updated', updatedPoll)
+        }catch(err){
+            console.log(err)
+        }
+    }
+
+    @UseGuards(WsAuth)
+    @SubscribeMessage("removeNomination")
+    async removeNomination(
+        @MessageBody("nominationId") id: string,
+        @ConnectedSocket() client
+    ) {
+        try{
+            console.log(client.pollId, id, ".....................")
+            const updatedPoll = await this.pollService.removeNomination(client.pollId, id)
             this.io.to(client.pollId).emit('poll_updated', updatedPoll)
         }catch(err){
             console.log(err)

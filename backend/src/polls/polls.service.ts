@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { createPollInterface, joinPollInterface } from './polls.interface';
-import { createPollId, createUserId } from './helper';
+import { createPollId, createUserId, createNominationId } from './helper';
 import { PollEntity } from './polls.entity';
 import { JwtService } from "@nestjs/jwt"
 
@@ -54,5 +54,25 @@ export class PollsService {
             return this.pollsEntity.removeParticipant(userId, pollId)
         }
         
+    }
+
+    async addNomination(pollId: string, userId: string, nomination: string) {
+        const nominationId = createNominationId()
+
+        try{
+            const poll = await this.pollsEntity.addNomination(pollId, userId, nominationId, nomination)
+            return poll
+        }catch(err){
+            throw new InternalServerErrorException()
+        }
+    }
+
+    async removeNomination(pollId: string, nominationId: string) {
+        try{
+            const poll = await this.pollsEntity.removeNomination(pollId, nominationId)
+            return poll
+        }catch(err){
+            throw new InternalServerErrorException()
+        }
     }
 }

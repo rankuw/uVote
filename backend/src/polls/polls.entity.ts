@@ -31,7 +31,9 @@ export class PollEntity {
                 noOfVotes, 
                 question,
                 adminId: userId,
-                participants: []
+                participants: [],
+                nominations: {},
+                hasStarted: false
             }
             const res = await this.RedisClient.setex(key, this.ttl, JSON.stringify(data))
             return data;
@@ -57,7 +59,6 @@ export class PollEntity {
         try{
             const poll = await this.getPoll(pollId)
             poll.participants.push(userId)
-            console.log(poll)
             const res = await this.RedisClient.setex("pollId:" + pollId, this.ttl, JSON.stringify(poll))
             return poll
         }catch(err){
@@ -77,5 +78,32 @@ export class PollEntity {
             this.logger.error(err)
             throw new InternalServerErrorException()
         }
+    }
+
+    async addNomination(pollId: string, userId: string, nominationId: string, nomination: string){
+        try{
+            const poll = await this.getPoll(pollId)
+            poll.nominations[nominationId] = {userId, nomination}
+            await this.RedisClient.setex("pollId:" + pollId, this.ttl, JSON.stringify(poll))
+            return poll
+        }catch(err){
+            console.log(err)
+            throw new InternalServerErrorException()
+        }
+    }
+
+    async removeNomination(pollId: string, nominationId: string) {
+        try{
+            const poll = await this.getPoll(pollId)
+            console.log(nominationId)
+            delete poll.nominations[nominationId]
+            console.log("++++++++++++++++++++++", poll)
+            await this.RedisClient.setex("pollId:" + pollId, this.ttl, JSON.stringify(poll))
+            return poll  
+        }catch(err){
+            console.log(err)
+            throw new InternalServerErrorException()
+        }
+              
     }
 }

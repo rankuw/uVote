@@ -16,5 +16,6 @@ export interface Poll {
     participants: [string],
     hasStarted: boolean,
     question: string,
-    noOfVotes: number
+    noOfVotes: number,
+    nominations: {}
 }
