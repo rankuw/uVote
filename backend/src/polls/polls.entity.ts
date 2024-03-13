@@ -63,7 +63,7 @@ export class PollEntity {
             const poll = await this.getPoll(pollId)
             poll.participants.push(userId)
             const res = await this.RedisClient.setex("pollId:" + pollId, this.ttl, JSON.stringify(poll))
-            return poll
+            return {...poll, userId}
         }catch(err){
             this.logger.error(err)
             throw new InternalServerErrorException()
