@@ -12,12 +12,14 @@ const pollSlice = createSlice({
     },
     reducers: {
         addPoll: (state, action) => {
-            // state.poll = action.payload.pollData
+            state.poll = action.payload.pollData
             state.userToken = action.payload.accessToken
             const tokenData = userDetailFromToken(state.userToken)
             state.isAdmin = action.payload.pollData.adminId === tokenData.userId
             state.userName = tokenData.name
             state.userId = tokenData.userId
+            console.log("settt", action.payload)
+            return state
         },
         removePoll: (state) => {
             state.poll = {}

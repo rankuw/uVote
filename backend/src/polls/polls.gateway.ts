@@ -26,7 +26,7 @@ export class PollsGateway implements OnGatewayInit, OnGatewayConnection, OnGatew
         await client.join(client.pollId)
 
         const updatedPoll = await this.pollService.joinPoll({user: client.userName, pollId: client.pollId, userId: client.userId})
-
+        console.log("CHLLLLLLLLLLLLLL", client.pollId)
         this.io.to(client.pollId).emit("poll_updated", updatedPoll)
     }
 

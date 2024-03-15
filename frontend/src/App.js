@@ -2,6 +2,7 @@ import './App.css';
 import Welcome from './pages/Welcome';
 import Join from './pages/Join';
 import Create from './pages/Create';
+import WaitRoom from './pages/Waitroom';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import appStore from './store/appStore';
@@ -18,6 +19,10 @@ const appRouter = createBrowserRouter([
   {
     path: "/join",
     element: <Join/>
+  },
+  {
+    path: "/wait",
+    element: <WaitRoom/>
   }
 ])
 

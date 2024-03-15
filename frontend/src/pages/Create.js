@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios"
 import { addPoll } from "../store/pollSlice";
+import { useNavigate } from "react-router-dom";
 
 const Create = () => {
     const [noOfChoice, setNoOfChoice] = useState(0)
@@ -9,6 +10,7 @@ const Create = () => {
     const [userName, setUserName] = useState("")
     const {poll, userToken} = useSelector((store) => store.poll || store.userToken)
     const dispatch = useDispatch()
+    const navigate = useNavigate()
 
     const increaseCount = () => {
         setNoOfChoice(noOfChoice + 1)
@@ -41,7 +43,9 @@ const Create = () => {
                 question: pollName,
                 noOfVotes: noOfChoice
             })
+            console.log(data)
             dispatch(addPoll(data.data))
+            navigate("/wait")
         }catch(err){
             console.log(err)
         }
@@ -80,7 +84,7 @@ const Create = () => {
 
                 <div className="flex justify-center flex-wrap gap-6">
                     <button disabled={!areFieldsValid()} onClick={createPoll}  className="px-10 py-2 rounded-lg border-solid border-2 border-amber-500 text-amber-500 w-4/5 disabled:border-neutral-500 disabled:text-neutral-500">
-                        Create
+                        Create Poll
                     </button>
                     <button onClick={resetPoll} className="px-10 py-2 rounded-lg border-solid border-2 border-rose-800 text-rose-800 w-4/5">
                         Start Over

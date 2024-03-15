@@ -2,13 +2,15 @@ import axios from "axios"
 import { useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { addPoll } from "../store/pollSlice"
+import { useNavigate } from "react-router-dom"
 
 const Join = () => {
     const [code, setCode] = useState("")
     const [name, setName] = useState("")
     const dispatch = useDispatch()
+    const navigate = useNavigate()
     const dataa = useSelector((store) => store.poll || store.userToken || store.isAdmin)
-    console.log(dataa, "OOOOOOOOOOOOOOO")
+  
     const resetPoll = () => {
         setCode("")
         setName("")
@@ -21,8 +23,8 @@ const Join = () => {
                 pollId: code
             })
             dispatch(addPoll(data.data))
-            console.log(dataa, "OOOOOOOOOOOOOOO+++++++++++++++")
             localStorage.setItem("userInfo", JSON.stringify(data.data))
+            navigate("/wait")
         }catch(err){
             console.log(err)
         }

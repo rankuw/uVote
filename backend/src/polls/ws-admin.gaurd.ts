@@ -16,6 +16,8 @@ export class WsAuth implements CanActivate {
             const socket = context.switchToWs().getClient()
             const token =
                 socket.handshake.auth.token || socket.handshake.headers['token'];
+            console.log("OOOOOOOOOOOOOOOOOOOOO")
+                console.log(socket.handshake)
             console.log(token)
             if (!token) {
                 console.log('Token missing');
