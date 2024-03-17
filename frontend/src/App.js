@@ -6,6 +6,7 @@ import WaitRoom from './pages/Waitroom';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import appStore from './store/appStore';
+import Nomination from './components/Nomination';
 
 const appRouter = createBrowserRouter([
   {

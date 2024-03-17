@@ -18,8 +18,14 @@ const pollSlice = createSlice({
             state.isAdmin = action.payload.pollData.adminId === tokenData.userId
             state.userName = tokenData.name
             state.userId = tokenData.userId
-            console.log("settt", action.payload)
+            
+            
+            console.log(action.payload)
             return state
+        },
+        updatePoll: (state, action) => {
+            console.log(action.payload, "WTFFFFFFFFFFFFFFFFFFFFFFFFFf")
+            state.poll = action.payload.pollData || action.payload
         },
         removePoll: (state) => {
             state.poll = {}
@@ -27,5 +33,5 @@ const pollSlice = createSlice({
     }
 })
 
-export const {addPoll, removePoll } = pollSlice.actions
+export const {addPoll, removePoll, updatePoll } = pollSlice.actions
 export default pollSlice.reducer;
