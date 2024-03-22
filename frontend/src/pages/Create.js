@@ -43,7 +43,6 @@ const Create = () => {
                 question: pollName,
                 noOfVotes: noOfChoice
             })
-            console.log(data)
             dispatch(addPoll(data.data))
             navigate("/wait")
         }catch(err){

@@ -19,8 +19,6 @@ const pollSlice = createSlice({
             state.userName = tokenData.name
             state.userId = tokenData.userId
             
-            
-            console.log(action.payload)
             return state
         },
         updatePoll: (state, action) => {
