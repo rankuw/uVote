@@ -28,7 +28,7 @@ export class PollsService {
         if(!joinPoll.userId){
             joinPoll.userId = createUserId()
         }
-        const res = await this.pollsEntity.addParticipant(joinPoll.userId, joinPoll.pollId)
+        const res = await this.pollsEntity.addParticipant(joinPoll.userId, joinPoll.pollId, joinPoll.user)
 
         const accessToken = await this.jwtService.sign({
             pollId: joinPoll.pollId,
@@ -39,7 +39,7 @@ export class PollsService {
     }
 
     async rejoinPoll(rejoinPoll){
-        const res = await this.pollsEntity.addParticipant(rejoinPoll.userId, rejoinPoll.pollId)
+        const res = await this.pollsEntity.addParticipant(rejoinPoll.userId, rejoinPoll.pollId, rejoinPoll.user)
         return {pollData: {...res}}
     }
 

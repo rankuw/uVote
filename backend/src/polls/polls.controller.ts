@@ -9,8 +9,6 @@ export class PollsController {
 
     @Post()
     async create(@Body() createPoll: CreatePollDto){
-        console.log(createPoll)
-        console.log("OOOOOOOOOOOOOOOO")
         return await this.pollsService.createPoll(createPoll)
     }
 

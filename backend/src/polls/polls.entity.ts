@@ -49,7 +49,6 @@ export class PollEntity {
     async getPoll(pollId: string): Promise<Poll> {
         try{
             const key = "pollId:" + pollId
-            console.log(key)
             const poll = await this.RedisClient.get(key)
             return JSON.parse(poll)
         }catch(err){
@@ -58,10 +57,10 @@ export class PollEntity {
         }
     }
 
-    async addParticipant(userId: string, pollId){
+    async addParticipant(userId: string, pollId, user){
         try{
             const poll = await this.getPoll(pollId)
-            poll.participants.push(userId)
+            poll.participants.push([userId, user])
             const res = await this.RedisClient.setex("pollId:" + pollId, this.ttl, JSON.stringify(poll))
             return {...poll, userId}
         }catch(err){
@@ -90,7 +89,6 @@ export class PollEntity {
             await this.RedisClient.setex("pollId:" + pollId, this.ttl, JSON.stringify(poll))
             return poll
         }catch(err){
-            console.log(err)
             throw new InternalServerErrorException()
         }
     }
@@ -102,7 +100,6 @@ export class PollEntity {
             await this.RedisClient.setex("pollId:" + pollId, this.ttl, JSON.stringify(poll))
             return poll  
         }catch(err){
-            console.log(err)
             throw new InternalServerErrorException()
         }
               
@@ -115,7 +112,6 @@ export class PollEntity {
             await this.RedisClient.setex("pollId:" + pollId, this.ttl, JSON.stringify(poll))
             return poll  
         }catch(err){
-            console.log(err)
             throw new InternalServerErrorException()
         }
     }
@@ -127,7 +123,6 @@ export class PollEntity {
             await this.RedisClient.setex("pollId:" + pollId, this.ttl, JSON.stringify(poll))
             return poll
         }catch(err){
-            console.log(err)
             throw new InternalServerErrorException()
         }
     }
@@ -143,7 +138,6 @@ export class PollEntity {
             return poll
 
         }catch(err){
-            console.log(err)
             throw new InternalServerErrorException()
         }
     }

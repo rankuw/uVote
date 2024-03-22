@@ -26,7 +26,7 @@ export class PollsGateway implements OnGatewayInit, OnGatewayConnection, OnGatew
         await client.join(client.pollId)
 
         const updatedPoll = await this.pollService.joinPoll({user: client.userName, pollId: client.pollId, userId: client.userId})
-        console.log("CHLLLLLLLLLLLLLL", client.pollId)
+        
         this.io.to(client.pollId).emit("poll_updated", updatedPoll)
     }
 
@@ -36,7 +36,7 @@ export class PollsGateway implements OnGatewayInit, OnGatewayConnection, OnGatew
         this.logger.log("Number of connected socket: ", sockets.size)
 
         const updatedPoll = await this.pollService.removeUser(client.userId, client.pollId)
-        console.log(updatedPoll)
+       
         this.io.to(client.pollId).emit("poll_updated", updatedPoll)
     }
 
@@ -48,7 +48,7 @@ export class PollsGateway implements OnGatewayInit, OnGatewayConnection, OnGatew
     ) {
         try{
             const updatedPoll = await this.pollService.removeUser(userId, client.pollId)
-            console.log(updatedPoll)
+           
             this.io.to(client.pollId).emit('poll_updated', updatedPoll)
         }catch(err){
             console.log(err)
@@ -62,7 +62,7 @@ export class PollsGateway implements OnGatewayInit, OnGatewayConnection, OnGatew
     ) {
         try{
             const updatedPoll = await this.pollService.addNomination(client.pollId, client.userId, nomination)
-            console.log(updatedPoll)
+            
             this.io.to(client.pollId).emit('poll_updated', updatedPoll)
         }catch(err){
             console.log(err)

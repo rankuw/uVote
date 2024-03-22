@@ -13,7 +13,7 @@ export interface joinPollInterface{
 export interface Poll {
     id: string,
     adminId: string,
-    participants: [string],
+    participants: [{}],
     hasStarted: boolean,
     question: string,
     noOfVotes: number,

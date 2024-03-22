@@ -7,7 +7,6 @@ export const redisModule = RedisModule.registerAsync({
   imports: [ConfigModule],
   useFactory: async (configService: ConfigService) => {
     const logger = new Logger('RedisModule');
-    console.log(configService)
     const toReturn = {
       connectionOptions: {
         host: configService.get('REDIS_HOST'),
@@ -28,7 +27,6 @@ export const redisModule = RedisModule.registerAsync({
       },
       
     };
-    console.log(toReturn)
     return toReturn
   },
   inject: [ConfigService],

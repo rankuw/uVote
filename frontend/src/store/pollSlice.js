@@ -22,7 +22,6 @@ const pollSlice = createSlice({
             return state
         },
         updatePoll: (state, action) => {
-            console.log(action.payload, "WTFFFFFFFFFFFFFFFFFFFFFFFFFf")
             state.poll = action.payload.pollData || action.payload
         },
         removePoll: (state) => {

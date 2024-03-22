@@ -10,7 +10,6 @@ import { WsUnknownException, WsBadRequestException, WsTypeException } from './ws
 export class WsCatchAllFilter implements ExceptionFilter {
   catch(exception: Error, host: ArgumentsHost) {
     const socket = host.switchToWs().getClient();
-    console.log(exception)
     if (exception instanceof BadRequestException) {
       const exceptionData = exception.getResponse();
       const exceptionMessage =
